@@ -3,13 +3,10 @@
  * Plano Vercel Hobby: Edge Middleware incluído
  * Storage in-memory (suficiente pré-PMF 10 pessoas, sem KV)
  * Decision 0089: não loga IPs em disco
+ * Web Standards (Request/Response) · sem Next.js
  */
-import { NextRequest, NextResponse } from "next/server";
 
-// In-memory store: { ip -> { count, resetAt } }
-// Instância por cold-start (Vercel Edge reinicia periodicamente — ok pré-PMF)
 const store = new Map<string, { count: number; resetAt: number }>();
-
 const LIMIT = 100;
 const WINDOW_MS = 24 * 60 * 60 * 1000; // 24h
 
@@ -17,10 +14,9 @@ export const config = {
   matcher: ["/api/chat"],
 };
 
-export default function middleware(req: NextRequest): NextResponse {
-  // Só aplica rate limit em POST /api/chat
+export default function middleware(req: Request): Response {
   if (req.method !== "POST") {
-    return NextResponse.next();
+    return new Response(null, { status: 200, headers: { "x-middleware-next": "1" } });
   }
 
   const ip =
@@ -33,12 +29,12 @@ export default function middleware(req: NextRequest): NextResponse {
 
   if (!record || now > record.resetAt) {
     store.set(ip, { count: 1, resetAt: now + WINDOW_MS });
-    return NextResponse.next();
+    return new Response(null, { status: 200, headers: { "x-middleware-next": "1" } });
   }
 
   if (record.count >= LIMIT) {
     const retryAfter = Math.ceil((record.resetAt - now) / 1000);
-    return new NextResponse(
+    return new Response(
       JSON.stringify({ error: "Limite de mensagens atingido. Tente amanhã." }),
       {
         status: 429,
@@ -51,5 +47,5 @@ export default function middleware(req: NextRequest): NextResponse {
   }
 
   record.count += 1;
-  return NextResponse.next();
+  return new Response(null, { status: 200, headers: { "x-middleware-next": "1" } });
 }
