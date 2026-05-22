@@ -385,6 +385,7 @@ function renderConversa(slug, convId) {
       </a>
       <span class="header__title">${escHtml(project.name)}</span>
       <div class="header__actions">
+        <button class="btn btn--ghost btn--sm" type="button" id="clear-conv-btn" title="Apagar conversa" style="font-size:var(--text-xs);color:var(--color-text-muted);">Apagar conversa</button>
         <div class="header__avatar" role="button" tabindex="0" aria-label="Minha conta">RR</div>
       </div>
     </header>
@@ -420,7 +421,17 @@ function renderConversa(slug, convId) {
   document.getElementById('new-conv-btn')?.addEventListener('click', () => createNewConversation(slug));
   document.getElementById('proj-sidebar-new-btn')?.addEventListener('click', () => openCreateModal(slug));
 
+  // Apagar conversa: limpa mensagens em memória e re-renderiza
+  document.getElementById('clear-conv-btn')?.addEventListener('click', () => {
+    if (!confirm('Apagar todas as mensagens desta conversa?')) return;
+    _chatMessages[convId] = [];
+    renderConversa(slug, convId);
+  });
+
+  let _sending = false;
+
   function sendMessage() {
+    if (_sending) return;
     const text = textarea.value.trim();
     if (!text) return;
 
@@ -441,12 +452,8 @@ function renderConversa(slug, convId) {
     }
     updateProjectActivity(slug);
 
-    // Stub POST /api/conversas/:id/msg — Decision 0089: no content logged
-    callChatApi(convId, text).then(reply => {
-      const assistantMsg = { id: Date.now() + 1, role: 'assistant', text: reply, ts: Date.now() };
-      _chatMessages[convId].push(assistantMsg);
-      appendMessage(assistantMsg);
-    });
+    // Claude API real via SSE — Decision 0089: no content logged server-side
+    callChatApiSSE(slug, convId, text);
   }
 }
 
@@ -475,26 +482,124 @@ function renderMessage(msg) {
   const bg = isUser ? 'var(--color-accent-gold)' : 'var(--color-bg-surface)';
   const color = isUser ? '#0A0A0F' : 'var(--color-text-primary)';
   const label = isUser ? 'Você' : 'Vela';
-  return `<div style="display:flex;flex-direction:column;align-items:${align};gap:4px;max-width:72%;">
+  return `<div data-msg-id="${msg.id}" style="display:flex;flex-direction:column;align-items:${align};gap:4px;max-width:72%;">
     <span style="font-size:var(--text-xs);color:var(--color-text-muted);padding:0 var(--space-2);">${label}</span>
-    <div style="background:${bg};color:${color};padding:var(--space-3) var(--space-4);border-radius:12px;font-size:var(--text-sm);line-height:1.6;white-space:pre-wrap;word-break:break-word;">${escHtml(msg.text)}</div>
+    <div style="background:${bg};color:${color};padding:var(--space-3) var(--space-4);border-radius:12px;font-size:var(--text-sm);line-height:1.6;white-space:pre-wrap;word-break:break-word;" data-msg-text>${escHtml(msg.text)}</div>
   </div>`;
 }
 
-async function callChatApi(convId, text) {
-  try {
-    const resp = await fetch(`/api/conversas/${encodeURIComponent(convId)}/msg`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ msg: text })
+// ---------------------------------------------------------------------------
+// Claude API real — SSE streaming (Wave 3)
+// Decision 0089: history fica só em memória client-side, nunca persiste server
+// ---------------------------------------------------------------------------
+function _resolveProjectId(slug) {
+  // Mapeamento slug → project_id para system prompt correto
+  // Slugs criados pelo usuário podem ter qualquer nome —
+  // procura palavras-chave no slug para rotear para competência certa
+  const s = (slug || '').toLowerCase();
+  if (s.includes('ada') || s.includes('ops') || s.includes('infra') || s.includes('eng')) return 'ada';
+  if (s.includes('leo') || s.includes('copy') || s.includes('growth') || s.includes('conteud')) return 'leo';
+  if (s.includes('max') || s.includes('pmo') || s.includes('sprint') || s.includes('product')) return 'max';
+  if (s.includes('val') || s.includes('qa') || s.includes('qualidade') || s.includes('metrica')) return 'val';
+  return 'default-norte';
+}
+
+function callChatApiSSE(slug, convId, text) {
+  // Disable send while streaming
+  const sendBtn = document.getElementById('chat-send-btn');
+  const textarea = document.getElementById('chat-input');
+  if (sendBtn) sendBtn.disabled = true;
+  if (textarea) textarea.disabled = true;
+
+  // Build history (last 20 msgs, excluding the one just added)
+  const history = (_chatMessages[convId] || []).slice(-21, -1); // exclude last (just pushed user msg)
+  const project_id = _resolveProjectId(slug);
+
+  // Create streaming assistant bubble
+  const assistantId = Date.now() + 1;
+  const assistantMsg = { id: assistantId, role: 'assistant', text: '', ts: Date.now() };
+  _chatMessages[convId].push(assistantMsg);
+  appendMessage(assistantMsg);
+
+  // Find the bubble DOM element for progressive update
+  let container = document.getElementById('chat-messages');
+  const bubbles = container ? container.querySelectorAll('[data-msg-id]') : [];
+  const bubble = bubbles[bubbles.length - 1];
+  const textNode = bubble ? bubble.querySelector('[data-msg-text]') : null;
+
+  let accumulated = '';
+
+  fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      message: text,
+      history_last_n: history.map(m => ({ role: m.role, text: m.text })),
+      project_id,
+      conversation_id: convId,
+    }),
+  })
+    .then(async resp => {
+      if (resp.status === 429) {
+        const data = await resp.json().catch(() => ({}));
+        _finishStream(convId, assistantId, data.error || 'Limite atingido. Tente amanhã.', textNode, sendBtn, textarea);
+        return;
+      }
+      if (!resp.ok) {
+        _finishStream(convId, assistantId, 'Erro ao conectar. Tente novamente.', textNode, sendBtn, textarea);
+        return;
+      }
+
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      async function read() {
+        const { done, value } = await reader.read();
+        if (done) {
+          _finishStream(convId, assistantId, accumulated || '…', textNode, sendBtn, textarea);
+          return;
+        }
+        buffer += decoder.decode(value, { stream: true });
+        // Parse SSE lines
+        const lines = buffer.split('\n');
+        buffer = lines.pop(); // keep incomplete line
+
+        for (const line of lines) {
+          if (line.startsWith('event: chunk')) continue;
+          if (line.startsWith('event: done')) {
+            _finishStream(convId, assistantId, accumulated, textNode, sendBtn, textarea);
+            return;
+          }
+          if (line.startsWith('event: error')) continue;
+          if (line.startsWith('data: ')) {
+            try {
+              const chunk = JSON.parse(line.slice(6));
+              accumulated += chunk;
+              if (textNode) textNode.textContent = accumulated;
+              // scroll
+              if (container) container.scrollTop = container.scrollHeight;
+            } catch {}
+          }
+        }
+        read();
+      }
+      read();
+    })
+    .catch(() => {
+      _finishStream(convId, assistantId, 'Sem conexão. Verifique sua internet.', textNode, sendBtn, textarea);
     });
-    if (resp.ok) {
-      const data = await resp.json();
-      return data.reply || 'Entendido.';
-    }
-  } catch {}
-  // Fallback mock
-  return `[echo] ${text}`;
+}
+
+function _finishStream(convId, assistantId, finalText, textNode, sendBtn, textarea) {
+  // Update in-memory history with final text
+  const msgs = _chatMessages[convId] || [];
+  const msg = msgs.find(m => m.id === assistantId);
+  if (msg) msg.text = finalText;
+  if (textNode && textNode.textContent !== finalText) textNode.textContent = finalText;
+  // Re-enable input
+  if (sendBtn) sendBtn.disabled = false;
+  if (textarea) { textarea.disabled = false; textarea.focus(); }
 }
 
 function createNewConversation(slug) {

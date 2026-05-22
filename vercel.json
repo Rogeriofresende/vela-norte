@@ -1,4 +1,10 @@
 {
   "buildCommand": null,
-  "outputDirectory": "."
+  "outputDirectory": ".",
+  "functions": {
+    "api/chat.py": {
+      "runtime": "python3.12",
+      "maxDuration": 30
+    }
+  }
 }
