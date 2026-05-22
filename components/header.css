@@ -1,0 +1,174 @@
+/* =========================================================
+   Vela — header.css v1.0
+   Brand book 04-componentes.md §7
+   Fixed 48px · logo left · actions right
+   ========================================================= */
+
+/* --------------------------------------------------
+   Header container
+-------------------------------------------------- */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);  /* 48px */
+  background: var(--color-bg-deep);
+  border-bottom: 1px solid var(--color-border-subtle);
+  display: flex;
+  align-items: center;
+  gap: 0;
+  z-index: var(--z-header);
+  padding: 0 var(--space-4);
+}
+
+/* --------------------------------------------------
+   Região esquerda — logo / wordmark
+-------------------------------------------------- */
+.header__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: var(--sidebar-width);  /* alinha com sidebar 240px */
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.header__wordmark {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 400;
+  color: var(--color-accent-gold);
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+/* Ícone SVG ao lado do wordmark (opcional) */
+.header__logo-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--color-accent-gold);
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------
+   Região central — título de página (opcional)
+-------------------------------------------------- */
+.header__title {
+  flex: 1;
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 var(--space-4);
+}
+
+/* --------------------------------------------------
+   Região direita — ações globais
+-------------------------------------------------- */
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------
+   Divider vertical entre zonas
+-------------------------------------------------- */
+.header__divider {
+  width: 1px;
+  height: 20px;
+  background: var(--color-border-subtle);
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------
+   Botão de ação no header (estende .btn--ghost)
+   Sobrepõe height pra caber nos 48px
+-------------------------------------------------- */
+.header__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  height: 32px;
+  padding: 0 var(--space-3);
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 150ms ease, color 150ms ease;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.header__btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.header__btn:hover {
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
+}
+
+.header__btn:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+.header__btn:disabled {
+  opacity: 0.40;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Variante primária no header */
+.header__btn--primary {
+  background: var(--color-accent-gold);
+  color: #0A0A0F;
+}
+
+.header__btn--primary:hover {
+  background: var(--color-accent-gold-hover);
+  color: #0A0A0F;
+}
+
+/* --------------------------------------------------
+   Avatar / perfil (círculo 28px)
+-------------------------------------------------- */
+.header__avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 150ms ease;
+}
+
+.header__avatar:hover {
+  border-color: var(--step-5);
+}
+
+.header__avatar:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}

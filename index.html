@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vela — Gerenciador de projetos</title>
+
+  <!-- Tokens + Base -->
+  <link rel="stylesheet" href="styles/tokens.css" />
+  <link rel="stylesheet" href="styles/typography.css" />
+  <link rel="stylesheet" href="styles/spacing.css" />
+
+  <!-- Componentes -->
+  <link rel="stylesheet" href="components/card.css" />
+  <link rel="stylesheet" href="components/button.css" />
+  <link rel="stylesheet" href="components/input.css" />
+  <link rel="stylesheet" href="components/modal.css" />
+  <link rel="stylesheet" href="components/list.css" />
+  <link rel="stylesheet" href="components/sidebar.css" />
+  <link rel="stylesheet" href="components/header.css" />
+</head>
+<body>
+
+<!-- =========================================================
+     LAYOUT ROOT — 3 zonas: Header · Sidebar · Content
+     ========================================================= -->
+<div class="layout-root">
+
+  <!-- HEADER -->
+  <header class="layout-header header">
+    <a href="/" class="header__logo">
+      <svg class="header__logo-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M10 2 L17 16 H3 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+      </svg>
+      <span class="header__wordmark">Vela</span>
+    </a>
+
+    <span class="header__title">Projetos</span>
+
+    <div class="header__actions">
+      <button class="header__btn" type="button">
+        <svg viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M7 4.5 V7.5 M7 9.2 V9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        Ajuda
+      </button>
+
+      <div class="header__divider"></div>
+
+      <button class="header__btn header__btn--primary" type="button">
+        <svg viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M7 2 V12 M2 7 H12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Novo projeto
+      </button>
+
+      <div class="header__avatar" role="button" tabindex="0" aria-label="Minha conta">
+        RR
+      </div>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <nav class="layout-sidebar sidebar" aria-label="Navegação principal">
+    <div class="sidebar__inner">
+
+      <!-- Seção: Projetos -->
+      <div class="sidebar__section">
+        <p class="sidebar__section-title">Projetos</p>
+
+        <a href="#" class="sidebar__item sidebar__item--active" aria-current="page">
+          <svg class="sidebar__item-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <rect x="1.5" y="1.5" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M4 5 H10 M4 7.5 H8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          <span class="sidebar__item-label">Todos os projetos</span>
+          <span class="sidebar__item-badge">3</span>
+        </a>
+
+        <a href="#" class="sidebar__item">
+          <svg class="sidebar__item-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2 7 L5.5 10.5 L12 3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="sidebar__item-label">Concluídos</span>
+          <span class="sidebar__item-badge">1</span>
+        </a>
+
+        <a href="#" class="sidebar__item">
+          <svg class="sidebar__item-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M7 1.5 L8.5 5.5 H12.5 L9.5 8 L10.5 12 L7 9.5 L3.5 12 L4.5 8 L1.5 5.5 H5.5 Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round" fill="none"/>
+          </svg>
+          <span class="sidebar__item-label">Favoritos</span>
+        </a>
+      </div>
+
+      <!-- Seção: Visualizações -->
+      <div class="sidebar__section">
+        <p class="sidebar__section-title">Visualizações</p>
+
+        <a href="#" class="sidebar__item">
+          <svg class="sidebar__item-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <rect x="1.5" y="1.5" width="4" height="11" rx="1" stroke="currentColor" stroke-width="1.2"/>
+            <rect x="8.5" y="4.5" width="4" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/>
+          </svg>
+          <span class="sidebar__item-label">Kanban</span>
+        </a>
+
+        <a href="#" class="sidebar__item">
+          <svg class="sidebar__item-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M1.5 3.5 H12.5 M1.5 7 H12.5 M1.5 10.5 H8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          <span class="sidebar__item-label">Lista</span>
+        </a>
+
+        <a href="#" class="sidebar__item sidebar__item--disabled">
+          <svg class="sidebar__item-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <rect x="1.5" y="3" width="11" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M4.5 3 V2 M9.5 3 V2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          <span class="sidebar__item-label">Calendário</span>
+          <span class="sidebar__item-badge">em breve</span>
+        </a>
+      </div>
+
+      <!-- Seção: Configurações -->
+      <div class="sidebar__section">
+        <p class="sidebar__section-title">Conta</p>
+
+        <a href="#" class="sidebar__item">
+          <svg class="sidebar__item-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <circle cx="7" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M2 12 C2 9.8 4.2 8 7 8 C9.8 8 12 9.8 12 12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          <span class="sidebar__item-label">Minha conta</span>
+        </a>
+
+        <a href="#" class="sidebar__item">
+          <svg class="sidebar__item-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M7 1.5 L8.3 4.1 L11.2 4.6 L9.1 6.6 L9.6 9.5 L7 8.1 L4.4 9.5 L4.9 6.6 L2.8 4.6 L5.7 4.1 Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round" fill="none"/>
+          </svg>
+          <span class="sidebar__item-label">Configurações</span>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Footer da sidebar -->
+    <div class="sidebar__footer">
+      <button class="sidebar__item" type="button" style="padding-left: var(--space-4);">
+        <svg class="sidebar__item-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M9.5 1.5 H12.5 V12.5 H9.5 M6 4.5 L1.5 7 L6 9.5 M1.5 7 H9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="sidebar__item-label">Sair</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- CONTENT -->
+  <main class="layout-content" id="main-content">
+
+    <!-- =============================================
+         SEÇÃO: Cards
+         ============================================= -->
+    <section class="py-6 px-6" style="border-bottom: 1px solid var(--color-border-subtle);">
+      <h2 style="margin-bottom: var(--space-4);">Meus projetos</h2>
+
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4);">
+
+        <!-- Card normal -->
+        <div class="card card--clickable">
+          <div class="card__header">
+            <span class="card__title">Alerta Imóveis</span>
+            <span class="card__meta">ativo</span>
+          </div>
+          <p class="card__body">Monitoramento de imóveis em Brasília com alertas por email.</p>
+          <div class="card__footer">
+            <button class="btn btn--ghost btn--sm" type="button">Ver tarefas</button>
+          </div>
+        </div>
+
+        <!-- Card com estado hover simulado -->
+        <div class="card card--clickable card--focus">
+          <div class="card__header">
+            <span class="card__title">Isenção IR</span>
+            <span class="card__meta">em andamento</span>
+          </div>
+          <p class="card__body">Landing page informativa sobre isenção do IR para aposentados.</p>
+          <div class="card__footer">
+            <button class="btn btn--ghost btn--sm" type="button">Ver tarefas</button>
+            <button class="btn btn--primary btn--sm" type="button">Abrir</button>
+          </div>
+        </div>
+
+        <!-- Card desabilitado -->
+        <div class="card card--disabled">
+          <div class="card__header">
+            <span class="card__title">Simples Report</span>
+            <span class="card__meta">arquivado</span>
+          </div>
+          <p class="card__body">Relatórios automáticos do Simples Nacional para MEIs.</p>
+          <div class="card__footer">
+            <button class="btn btn--ghost btn--sm" type="button" disabled>Reativar</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =============================================
+         SEÇÃO: Botões
+         ============================================= -->
+    <section class="py-6 px-6" style="border-bottom: 1px solid var(--color-border-subtle);">
+      <h2 style="margin-bottom: var(--space-4);">Ações</h2>
+
+      <div style="display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;">
+        <button class="btn btn--primary" type="button">Criar projeto</button>
+        <button class="btn btn--amber" type="button">Ação crítica</button>
+        <button class="btn btn--secondary" type="button">Cancelar</button>
+        <button class="btn btn--ghost" type="button">Fechar</button>
+        <button class="btn btn--primary btn--sm" type="button">Adicionar</button>
+        <button class="btn btn--secondary btn--sm" type="button">Editar</button>
+        <button class="btn btn--primary" type="button" disabled>Enviando...</button>
+      </div>
+    </section>
+
+    <!-- =============================================
+         SEÇÃO: Inputs
+         ============================================= -->
+    <section class="py-6 px-6" style="border-bottom: 1px solid var(--color-border-subtle);">
+      <h2 style="margin-bottom: var(--space-4);">Formulário</h2>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); max-width: 640px;">
+
+        <!-- Input normal -->
+        <div class="input-group">
+          <label class="input-label" for="nome-projeto">Nome do projeto</label>
+          <input class="input" id="nome-projeto" type="text" placeholder="Ex: Vela v2" />
+        </div>
+
+        <!-- Input com erro -->
+        <div class="input-group">
+          <label class="input-label" for="slug-projeto">Identificador</label>
+          <input class="input input--error" id="slug-projeto" type="text" value="meu projeto!" />
+          <span class="input-error-msg">Use apenas letras, números e hífens.</span>
+        </div>
+
+        <!-- Input desabilitado -->
+        <div class="input-group">
+          <label class="input-label" for="owner">Responsável</label>
+          <input class="input" id="owner" type="text" value="Rogério Resende" disabled />
+        </div>
+
+        <!-- Textarea -->
+        <div class="input-group" style="grid-column: 1 / -1;">
+          <label class="input-label" for="descricao">Descrição</label>
+          <textarea class="input input--textarea" id="descricao" placeholder="Descreva o projeto em poucas linhas..."></textarea>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =============================================
+         SEÇÃO: Lista
+         ============================================= -->
+    <section class="py-6 px-6" style="border-bottom: 1px solid var(--color-border-subtle);">
+      <h2 style="margin-bottom: var(--space-4);">Tarefas recentes</h2>
+
+      <div style="max-width: 480px; background: var(--color-bg-elev); border: 1px solid var(--color-border-subtle); border-radius: 6px; overflow: hidden;">
+
+        <p class="list__section-title">Esta semana</p>
+
+        <ul class="list" role="list">
+          <li>
+            <a href="#" class="list__item list__item--active">
+              <svg class="list__item-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <path d="M2 7 L5.5 10.5 L12 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="list__item-label">Criar tokens CSS base</span>
+              <span class="list__item-meta">hoje</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="list__item">
+              <svg class="list__item-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.2" fill="none"/>
+                <path d="M7 4.5 V7.5 L9 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+              </svg>
+              <span class="list__item-label">Revisar brand book v1.1 com equipe</span>
+              <span class="list__item-meta">amanhã</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="list__item">
+              <svg class="list__item-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <rect x="2" y="2" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/>
+              </svg>
+              <span class="list__item-label">Deploy primeiro smoke test</span>
+              <span class="list__item-meta">qui</span>
+            </a>
+          </li>
+        </ul>
+
+        <p class="list__section-title">Semana passada</p>
+
+        <ul class="list" role="list">
+          <li>
+            <button type="button" class="list__item list__item--disabled">
+              <svg class="list__item-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <path d="M7 2 V12 M2 7 H12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              </svg>
+              <span class="list__item-label">Tarefa suspensa temporariamente</span>
+              <span class="list__item-meta">pausado</span>
+            </button>
+          </li>
+        </ul>
+
+      </div>
+    </section>
+
+    <!-- =============================================
+         SEÇÃO: Modal (demo estático aberto)
+         ============================================= -->
+    <section class="py-6 px-6">
+      <h2 style="margin-bottom: var(--space-4);">Modal — exemplo</h2>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); margin-bottom: var(--space-4);">
+        O modal abaixo é exibido inline para demonstração do componente. Em produção usa `.modal-backdrop` fixed.
+      </p>
+
+      <!-- Modal embutido (sem backdrop fixo pra não cobrir tudo) -->
+      <div style="position: relative; background: var(--color-bg-elev); border: 1px solid var(--color-border-subtle); border-radius: 8px; padding: var(--space-6); max-width: 520px; display: flex; flex-direction: column; gap: var(--space-4);">
+
+        <div class="modal__header">
+          <h3 class="modal__title">Criar novo projeto</h3>
+          <button class="modal__close" type="button" aria-label="Fechar">
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 3 L13 13 M13 3 L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal__body">
+          <div class="input-group">
+            <label class="input-label" for="modal-project-name">Nome do projeto</label>
+            <input class="input" id="modal-project-name" type="text" placeholder="Ex: Vela — gestor de tarefas" autofocus />
+          </div>
+        </div>
+
+        <div class="modal__footer">
+          <button class="btn btn--secondary" type="button">Cancelar</button>
+          <button class="btn btn--primary" type="button">Criar projeto</button>
+        </div>
+
+      </div>
+    </section>
+
+  </main><!-- /layout-content -->
+
+</div><!-- /layout-root -->
+
+</body>
+</html>

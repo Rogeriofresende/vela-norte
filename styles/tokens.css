@@ -1,0 +1,66 @@
+/* =========================================================
+   Vela — tokens.css v1.0
+   Paleta Noite+Chama — brand book v1.1 canonical
+   Decision 0085: zero verde-floresta #002417 e derivados
+   ========================================================= */
+
+:root {
+  /* --------------------------------------------------
+     Escala dark 6-step
+  -------------------------------------------------- */
+  --step-0: #050508;
+  --step-1: #0A0A0F;
+  --step-2: #121218;
+  --step-3: #1A1A22;
+  --step-4: #222230;
+  --step-5: #2A2A35;
+
+  /* --------------------------------------------------
+     Superfícies de background
+  -------------------------------------------------- */
+  --color-bg-deep:    #050508;   /* mais escuro — header bg */
+  --color-bg:         #0A0A0F;   /* fundo principal */
+  --color-bg-elev:    #1A1A22;   /* elevado — cards, sidebar */
+  --color-bg-surface: #222230;   /* superfície interativa hover */
+
+  /* --------------------------------------------------
+     Texto
+  -------------------------------------------------- */
+  --color-text:           #FFFFFF;
+  --color-text-primary:   #FFFFFF;
+  --color-text-secondary: #B8B8C0;
+  --color-text-dim:       #B8B8C0;
+  --color-text-muted:     #6A6A75;
+  --color-text-disabled:  #4A4A55;
+
+  /* --------------------------------------------------
+     Acento — Norte canonical preservado
+  -------------------------------------------------- */
+  --color-accent-gold:       #FFE4B1;   /* principal — bege-dourado Norte */
+  --color-accent-gold-hover: #FFD080;   /* hover state acento gold */
+  --color-accent-amber:      #FFB347;   /* chama secundário — destaques chave (raro) */
+  --color-accent-amber-hover:#FF9A1F;   /* hover state acento amber */
+
+  /* --------------------------------------------------
+     Superfícies interativas
+  -------------------------------------------------- */
+  --color-border-subtle: #2A2A35;
+  --color-border-focus:  #FFE4B1;       /* outline foco — WCAG 2.4.11 */
+  --color-shadow:        rgba(0, 0, 0, 0.12);
+  --color-shadow-strong: rgba(0, 0, 0, 0.24);
+  --color-overlay:       rgba(10, 10, 15, 0.70);  /* backdrop modal */
+
+  /* --------------------------------------------------
+     Estados semânticos (uso raro — só quando significativo)
+  -------------------------------------------------- */
+  --color-ok:      #6BE6A8;
+  --color-warn:    #FFA94D;
+  --color-danger:  #FF6B6B;
+  --color-error:   #FF6B6B;   /* alias danger — inputs erro */
+
+  /* --------------------------------------------------
+     PROIBIDO — verificado via grep pré-entrega
+     Verde-floresta: #002417 #0F3026 #001B11 #002214 #1A3D2E #1F4A3F
+     Verde-lima: #a3ff00 #c8ff00
+  -------------------------------------------------- */
+}

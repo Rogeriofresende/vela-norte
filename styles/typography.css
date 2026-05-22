@@ -1,0 +1,127 @@
+/* =========================================================
+   Vela — typography.css v1.0
+   Google Fonts: Questrial 400 + Inter 400/500/600
+   Brand book 02-tipografia.md canonical
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Questrial&display=swap');
+
+:root {
+  /* --------------------------------------------------
+     Famílias
+  -------------------------------------------------- */
+  --font-display: 'Questrial', 'Trebuchet MS', sans-serif;   /* wordmark Vela + H1 */
+  --font-body:    'Inter', 'Segoe UI', system-ui, sans-serif; /* tudo mais */
+
+  /* --------------------------------------------------
+     Escala de tamanhos
+  -------------------------------------------------- */
+  --text-xs:   12px;   /* caption, metadata, badge */
+  --text-sm:   14px;   /* label, sidebar item, botão */
+  --text-base: 16px;   /* body, input */
+  --text-lg:   18px;   /* H3 */
+  --text-xl:   24px;   /* H2 */
+  --text-2xl:  32px;   /* H1 */
+
+  /* --------------------------------------------------
+     Line-height
+  -------------------------------------------------- */
+  --lh-display: 1.4;   /* H1/H2/H3 */
+  --lh-body:    1.6;   /* body, labels */
+
+  /* --------------------------------------------------
+     Pesos
+  -------------------------------------------------- */
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+}
+
+/* --------------------------------------------------
+   Reset tipográfico base
+-------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-body);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg);
+  margin: 0;
+  padding: 0;
+}
+
+/* --------------------------------------------------
+   Hierarquia de títulos
+-------------------------------------------------- */
+h1 {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--fw-regular);  /* Questrial é 400 only */
+  line-height: var(--lh-display);
+  color: var(--color-text-primary);
+  margin: 0 0 16px 0;
+}
+
+h2 {
+  font-family: var(--font-body);
+  font-size: var(--text-xl);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-display);
+  color: var(--color-text-primary);
+  margin: 0 0 12px 0;
+}
+
+h3 {
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-display);
+  color: var(--color-text-primary);
+  margin: 0 0 8px 0;
+}
+
+p {
+  margin: 0 0 16px 0;
+  color: var(--color-text-secondary);
+}
+
+/* --------------------------------------------------
+   Utilitários tipográficos
+-------------------------------------------------- */
+.text-xs      { font-size: var(--text-xs); line-height: var(--lh-body); }
+.text-sm      { font-size: var(--text-sm); line-height: var(--lh-body); }
+.text-base    { font-size: var(--text-base); line-height: var(--lh-body); }
+.text-lg      { font-size: var(--text-lg); line-height: var(--lh-display); }
+.text-xl      { font-size: var(--text-xl); line-height: var(--lh-display); }
+.text-2xl     { font-size: var(--text-2xl); line-height: var(--lh-display); }
+
+.text-primary   { color: var(--color-text-primary); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-dim       { color: var(--color-text-dim); }
+.text-muted     { color: var(--color-text-muted); }
+.text-disabled  { color: var(--color-text-disabled); }
+.text-accent    { color: var(--color-accent-gold); }
+
+.fw-regular  { font-weight: var(--fw-regular); }
+.fw-medium   { font-weight: var(--fw-medium); }
+.fw-semibold { font-weight: var(--fw-semibold); }
+
+/* Wordmark — usar APENAS para "Vela" logotipo */
+.wordmark {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: var(--fw-regular);
+  color: var(--color-accent-gold);
+  letter-spacing: 0.02em;
+}

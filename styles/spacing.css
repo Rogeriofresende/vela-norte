@@ -1,0 +1,114 @@
+/* =========================================================
+   Vela — spacing.css v1.0
+   Sistema base-4px — brand book 03-spacing-grid.md canonical
+   Nunca usar valores fora da escala (ex: 10px, 20px = proibido)
+   ========================================================= */
+
+:root {
+  /* --------------------------------------------------
+     Escala de espaçamento base-4
+  -------------------------------------------------- */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* --------------------------------------------------
+     Layout — offsets fixos
+  -------------------------------------------------- */
+  --header-height:    48px;
+  --sidebar-width:    240px;
+  --content-max-width: 1280px;
+
+  /* --------------------------------------------------
+     Z-index scale
+  -------------------------------------------------- */
+  --z-base:    0;
+  --z-sidebar: 50;
+  --z-header:  100;
+  --z-modal:   200;
+  --z-toast:   300;
+}
+
+/* --------------------------------------------------
+   Layout root — 3 zonas desktop
+   Header fixed top + Sidebar fixed left + Content fluid
+   Decision 0085: zero @media (max-width)
+-------------------------------------------------- */
+body {
+  min-width: 1280px;  /* viewport mínimo assumed — desktop-only */
+}
+
+.layout-root {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "sidebar content";
+  grid-template-columns: var(--sidebar-width) 1fr;
+  grid-template-rows: var(--header-height) 1fr;
+  min-height: 100vh;
+}
+
+/* Header ocupa topo full-width */
+.layout-header {
+  grid-area: header;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  z-index: var(--z-header);
+}
+
+/* Sidebar fixed left, abaixo do header */
+.layout-sidebar {
+  grid-area: sidebar;
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  width: var(--sidebar-width);
+  height: calc(100vh - var(--header-height));
+  z-index: var(--z-sidebar);
+  overflow-y: auto;
+}
+
+/* Content — margem automática pra não ficar sob header/sidebar */
+.layout-content {
+  grid-area: content;
+  margin-top: var(--header-height);
+  margin-left: var(--sidebar-width);
+  padding: var(--space-6);
+  min-height: calc(100vh - var(--header-height));
+  overflow-y: auto;
+}
+
+/* --------------------------------------------------
+   Utilitários de spacing
+-------------------------------------------------- */
+.p-1  { padding: var(--space-1); }
+.p-2  { padding: var(--space-2); }
+.p-3  { padding: var(--space-3); }
+.p-4  { padding: var(--space-4); }
+.p-6  { padding: var(--space-6); }
+.p-8  { padding: var(--space-8); }
+
+.px-1 { padding-left: var(--space-1); padding-right: var(--space-1); }
+.px-2 { padding-left: var(--space-2); padding-right: var(--space-2); }
+.px-3 { padding-left: var(--space-3); padding-right: var(--space-3); }
+.px-4 { padding-left: var(--space-4); padding-right: var(--space-4); }
+.px-6 { padding-left: var(--space-6); padding-right: var(--space-6); }
+
+.py-1 { padding-top: var(--space-1); padding-bottom: var(--space-1); }
+.py-2 { padding-top: var(--space-2); padding-bottom: var(--space-2); }
+.py-3 { padding-top: var(--space-3); padding-bottom: var(--space-3); }
+.py-4 { padding-top: var(--space-4); padding-bottom: var(--space-4); }
+
+.gap-1 { gap: var(--space-1); }
+.gap-2 { gap: var(--space-2); }
+.gap-3 { gap: var(--space-3); }
+.gap-4 { gap: var(--space-4); }
+.gap-6 { gap: var(--space-6); }
